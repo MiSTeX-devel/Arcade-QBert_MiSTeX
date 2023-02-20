@@ -177,7 +177,7 @@ reg  [15:0] io_dout;
 assign HPS_BUS[37]   = ioctl_wait;
 assign HPS_BUS[36]   = clk_sys;
 assign HPS_BUS[32]   = io_wide;
-assign HPS_BUS[15:0] = EXT_BUS[32] ? EXT_BUS[15:0] : fp_enable ? fp_dout : io_dout;
+assign HPS_BUS[15:0] = fp_enable ? fp_dout : io_dout;
 
 reg [15:0] cfg;
 assign buttons = cfg[1:0];
@@ -237,6 +237,20 @@ wire       pressed  = (ps2_key_raw[15:8] != 8'hf0);
 wire       extended = (~pressed ? (ps2_key_raw[23:16] == 8'he0) : (ps2_key_raw[15:8] == 8'he0));
 
 reg [MAX_W:0] byte_cnt;
+
+`ifdef DEBUG_HPS_OP
+assign DEBUG[5] = io_enable;
+
+spi_master spi_debug (
+	.spi_controller__sdo(DEBUG[0]),
+	.spi_controller__sck(DEBUG[1]),
+	.spi_controller__cs(DEBUG[4]),
+	.word_out({byte_cnt, io_din, io_dout}),
+	.start_transfer(io_strobe),
+	.clk(clk_sys),
+	.rst(reset),
+	);
+`endif
 
 always@(posedge clk_sys) begin : uio_block
 	reg [15:0] cmd;
