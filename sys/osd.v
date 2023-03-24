@@ -33,7 +33,9 @@ localparam OSD_HDR      = 12'd0;
 `endif
 
 reg        osd_enable;
-(* ramstyle="no_rw_check" *) reg  [7:0] osd_buffer[OSD_HDR ? (4096+1024) : 4096];
+
+localparam OSD_BUFFER_SIZE = OSD_HDR ? (4096+1024) : 4096;
+(* ramstyle="no_rw_check" *) reg  [7:0] osd_buffer[OSD_BUFFER_SIZE-1:0];
 
 reg        info = 0;
 reg  [8:0] infoh;
@@ -46,7 +48,7 @@ reg [21:0] osd_w;
 
 reg  [1:0] rot = 0;
 
-always@(posedge clk_sys) begin
+always@(posedge clk_sys) begin : bcnt_block
 	reg [12:0] bcnt;
 	reg  [7:0] cmd;
 	reg        has_cmd;
@@ -72,7 +74,7 @@ always@(posedge clk_sys) begin
 				// command 0x40: OSDCMDENABLE, OSDCMDDISABLE
 				if(io_din[7:4] == 4) begin
 					if(!io_din[0]) {osd_status,highres} <= 0;
-					else {osd_status,info} <= {~io_din[2],io_din[2]};
+					else {osd_status,info} <= {~io_din[2] & ~io_din[3],io_din[2]};
 					bcnt  <= 0;
 				end
 				// command 0x20: OSDCMDWRITE
@@ -100,7 +102,7 @@ always@(posedge clk_sys) begin
 end
 
 (* direct_enable *) reg ce_pix;
-always @(posedge clk_video) begin
+always @(posedge clk_video) begin : pix_block
 	reg [21:0] cnt = 0;
 	reg [21:0] pixsz, pixcnt;
 	reg deD;
@@ -131,7 +133,7 @@ wire [21:0] osd_h_hdr = (info || rot) ? osd_h : (osd_h + OSD_HDR);
 
 // pipeline the comparisons a bit
 always @(posedge clk_video) if(ce_pix) begin
-	v_cnt_h <= v_cnt < osd_t;
+	v_cnt_h <= v_cnt <= osd_t;
 	v_cnt_1 <= v_cnt < 320;
 	v_cnt_2 <= v_cnt < 640;
 	v_cnt_3 <= v_cnt < 960;
@@ -152,7 +154,7 @@ always @(posedge clk_video) if(ce_pix) begin
 	v_info_start_5 <= rot[0] ? (infox + (infox << 2)) : (infoy + (infoy << 2));
 end
 
-always @(posedge clk_video) begin
+always @(posedge clk_video) begin : osd_block
 	reg        deD;
 	reg  [2:0] osd_div;
 	reg  [2:0] multiscan;
@@ -257,7 +259,7 @@ end
 reg [23:0] rdout;
 assign dout = rdout;
 
-always @(posedge clk_video) begin
+always @(posedge clk_video) begin : out_block
 	reg [23:0] ordout1, nrdout1, rdout2, rdout3;
 	reg de1,de2,de3;
 	reg osd_mux;

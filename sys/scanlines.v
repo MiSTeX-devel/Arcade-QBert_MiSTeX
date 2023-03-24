@@ -5,15 +5,15 @@ module scanlines #(parameter v2=0)
 	input       [1:0] scanlines,
 	input      [23:0] din,
 	input             hs_in,vs_in,
-	input             de_in,
+	input             de_in,ce_in,
 
 	output reg [23:0] dout,
 	output reg        hs_out,vs_out,
-	output reg        de_out
+	output reg        de_out,ce_out
 );
 
 reg [1:0] scanline;
-always @(posedge clk) begin
+always @(posedge clk) begin : scanline_block
 	reg old_hs, old_vs;
 
 	old_hs <= hs_in;
@@ -54,14 +54,15 @@ always @(*) begin
 	endcase
 end
 
-always @(posedge clk) begin
+always @(posedge clk) begin : vga_out_block
 	reg [23:0] dout1, dout2;
-	reg de1,de2,vs1,vs2,hs1,hs2;
+	reg de1,de2,vs1,vs2,hs1,hs2,ce1,ce2;
 
 	dout   <= dout2; dout2 <= dout1; dout1 <= d;     
 	vs_out <= vs2;   vs2   <= vs1;   vs1   <= vs_in; 
 	hs_out <= hs2;   hs2   <= hs1;   hs1   <= hs_in; 
 	de_out <= de2;   de2   <= de1;   de1   <= de_in; 
+	ce_out <= ce2;   ce2   <= ce1;   ce1   <= ce_in; 
 end
 
 endmodule

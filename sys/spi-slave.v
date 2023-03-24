@@ -214,10 +214,7 @@ module spi_slave(spi_device__sdo, spi_device__sck, spi_device__cs, word_in, word
           endcase
         end
       default:
-        begin
           \current_tx$next  = word_out;
-          \spi_device__sdo$next  = 1'h0;
-        end
     endcase
     casez (rst)
       1'h1:

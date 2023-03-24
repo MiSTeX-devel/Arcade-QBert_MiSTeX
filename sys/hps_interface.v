@@ -39,7 +39,6 @@ always @(posedge sync_clk) begin
         fpga_en <= 0; _fpga_en <= 0;
         osd_en <= 0;  _osd_en <= 0;
         io_en <= 0;   _io_en <= 0;
-
     end else begin
         cs      <= _cs;      _cs      <= spi_cs;
         mosi    <= _mosi;    _mosi    <= spi_mosi;

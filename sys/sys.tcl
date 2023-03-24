@@ -132,4 +132,4 @@ set_global_assignment -name PRE_FLOW_SCRIPT_FILE "quartus_sh:sys/build_id.tcl"
 set_global_assignment -name CDF_FILE jtag.cdf
 set_global_assignment -name QIP_FILE sys/sys.qip
 
-set_global_assignment -name VERILOG_MACRO "DEBUG_NOHDMI=1"
+set_global_assignment -name VERILOG_MACRO "MISTER_DEBUG_NOHDMI=1"
