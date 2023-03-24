@@ -358,9 +358,9 @@ reg [7:0] mod = 255;
 always @(posedge clk_25) if (ioctl_wr & (ioctl_index==1)) mod <= ioctl_dout;
 
 
-wire [7:0] IP1710;
-wire [7:0] IP4740;
-wire [7:0] IPA1J2;
+reg [7:0] IP1710;
+reg [7:0] IP4740;
+reg [7:0] IPA1J2;
 
 
 always @(*) begin
@@ -447,7 +447,7 @@ always @(*) begin
         1'b0,// coin 2
         joystick_0[7], // coin 1
         joystick_0[8], // test 1
-        ~status[6],    // test 2
+        ~status[6]     // test 2
       };
 
       IP4740 <= {
