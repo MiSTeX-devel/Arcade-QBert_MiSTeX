@@ -10,6 +10,11 @@ module  pll_0002(
 );
 
 	wire feedback;
+
+	wire outclk_0_bufg;
+	wire outclk_1_bufg;
+	wire outclk_2_bufg;
+	wire outclk_3_bufg;
 	
 	PLLE2_ADV #(
 		.CLKFBOUT_MULT(6'd32),
@@ -31,11 +36,16 @@ module  pll_0002(
 		.PWRDWN(1'b0),
 		.RST(rst),
 		.CLKFBOUT(feedback),
-		.CLKOUT0(outclk_0),
-		.CLKOUT1(outclk_1),
-		.CLKOUT2(outclk_2),
-		.CLKOUT3(outclk_3),
+		.CLKOUT0(outclk_0_bufg),
+		.CLKOUT1(outclk_1_bufg),
+		.CLKOUT2(outclk_2_bufg),
+		.CLKOUT3(outclk_3_bufg),
 		.LOCKED(locked)
-);
+	);
+
+	BUFG outclk_bufg_0 (.I(outclk_0_bufg), .O(outclk_0));
+	BUFG outclk_bufg_1 (.I(outclk_1_bufg), .O(outclk_1));
+	BUFG outclk_bufg_2 (.I(outclk_2_bufg), .O(outclk_2));
+	BUFG outclk_bufg_3 (.I(outclk_3_bufg), .O(outclk_3));
 	
 endmodule
