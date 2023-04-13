@@ -5,6 +5,7 @@ module eu_rom(
   output reg [31:0] douta
 );
 
+(* ramstyle = "logic" *)
 reg [31:0] memory[3961:0];
 
 initial $readmemb("microcode.mem", memory);
