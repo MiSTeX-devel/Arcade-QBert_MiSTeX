@@ -21,7 +21,7 @@ module  pll_0002(
 		.CLKIN1_PERIOD(20.0),
 		.CLKOUT0_DIVIDE(7'd32), // 50 MHz = 50 MHz * 32 / 32
 		.CLKOUT0_PHASE(1'd0),
-		.CLKOUT1_DIVIDE(7'd32), // 40 MHz = 50 MHz * 32 / 40
+		.CLKOUT1_DIVIDE(7'd40), // 40 MHz = 50 MHz * 32 / 40
 		.CLKOUT1_PHASE(1'd0),
 		.CLKOUT2_DIVIDE(7'd64), // 25 MHz = 50 MHz * 32 / 64
 		.CLKOUT2_PHASE(1'd0),
