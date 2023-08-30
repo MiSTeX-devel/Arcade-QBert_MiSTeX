@@ -200,7 +200,7 @@ wire [1:0] ar = status[9:8];
 assign VIDEO_ARX = (!ar) ? ((no_rotate) ? 8'd8 : 8'd7) : (ar - 1'd1);
 assign VIDEO_ARY = (!ar) ? ((no_rotate) ? 8'd7 : 8'd8) : 12'd0;
 
-`include "build_id.v"
+`include "build_id.vh"
 localparam CONF_STR = {
   "QBert;;",
   "-;",
